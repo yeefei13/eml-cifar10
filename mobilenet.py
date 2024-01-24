@@ -348,14 +348,17 @@ class ResNet18(nn.Module):
         
         # block2 - 1
         # x = self.relu(self.batchnorm2_1_1(self.conv2_1_1(op1)))    # conv2_1 
+        x = self.conv2_1(op1)
         # x = self.batchnorm2_1_2(self.conv2_1_2(x))                 # conv2_1
-        x = self.conv2_1(x)
+        x = self.conv2_1_2(x)
+     
         x = self.dropout2_1(x)
         # block2 - Adjust - No adjust in this layer as dimensions are already same
-        # block2 - Concatenate 1
+        # block2 - Concatenate 1s
         op2_1 = self.relu(x + op1)
         # block2 - 2
-        x = self.relu(self.batchnorm2_2_1(self.conv2_2_1(op2_1)))  # conv2_2 
+        # x = self.relu(self.batchnorm2_2_1(self.conv2_2_1(op2_1)))  # conv2_2
+        x = self.conv2_2_1(op2_1) 
         x = self.batchnorm2_2_2(self.conv2_2_2(x))                 # conv2_2
         x = self.dropout2_2(x)
         # op - block2
