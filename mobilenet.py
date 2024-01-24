@@ -78,57 +78,258 @@ class ResNet18(nn.Module):
                         )
 
 
-        self.conv2_1_1 = nn.Conv2d(in_channels=64, out_channels=64, kernel_size=(3,3), stride=(1,1), padding=(1,1))
-        self.batchnorm2_1_1 = nn.BatchNorm2d(64)
-        self.conv2_1_2 = nn.Conv2d(in_channels=64, out_channels=64, kernel_size=(3,3), stride=(1,1), padding=(1,1))
+        # self.conv2_1_1 = nn.Conv2d(in_channels=64, out_channels=64, kernel_size=(3,3), stride=(1,1), padding=(1,1))
+        # self.batchnorm2_1_1 = nn.BatchNorm2d(64)
+       
+        # self.conv2_1_2 = nn.Conv2d(in_channels=64, out_channels=64, kernel_size=(3,3), stride=(1,1), padding=(1,1))
+        self.conv2_1_2 =nn.Sequential(
+                        # dw
+                        nn.Conv2d(in_channels=64, out_channels=64, kernel_size=3, stride=1, padding=1, groups=64, bias=False),
+                        nn.BatchNorm2d(64),
+                        nn.ReLU(inplace=True),
+
+                        # pw
+                        nn.Conv2d(64, 64, 1, 1, 0, bias=False),
+                        nn.BatchNorm2d(64),
+                        nn.ReLU(inplace=True),
+                        )
         self.batchnorm2_1_2 = nn.BatchNorm2d(64)
+        
         self.dropout2_1 = nn.Dropout(p=self.dropout_percentage)
         # BLOCK-2 (2)
-        self.conv2_2_1 = nn.Conv2d(in_channels=64, out_channels=64, kernel_size=(3,3), stride=(1,1), padding=(1,1))
+        # self.conv2_2_1 = nn.Conv2d(in_channels=64, out_channels=64, kernel_size=(3,3), stride=(1,1), padding=(1,1))
+        self.conv2_2_1 =nn.Sequential(
+                        # dw
+                        nn.Conv2d(in_channels=64, out_channels=64, kernel_size=3, stride=1, padding=1, groups=64, bias=False),
+                        nn.BatchNorm2d(64),
+                        nn.ReLU(inplace=True),
+
+                        # pw
+                        nn.Conv2d(64, 64, 1, 1, 0, bias=False),
+                        nn.BatchNorm2d(64),
+                        nn.ReLU(inplace=True),
+                        )
         self.batchnorm2_2_1 = nn.BatchNorm2d(64)
-        self.conv2_2_2 = nn.Conv2d(in_channels=64, out_channels=64, kernel_size=(3,3), stride=(1,1), padding=(1,1))
+        # self.conv2_2_2 = nn.Conv2d(in_channels=64, out_channels=64, kernel_size=(3,3), stride=(1,1), padding=(1,1))
+        self.conv2_2_2 = nn.Sequential(
+                        # dw
+                        nn.Conv2d(in_channels=64, out_channels=64, kernel_size=3, stride=1, padding=1, groups=64, bias=False),
+                        nn.BatchNorm2d(64),
+                        nn.ReLU(inplace=True),
+
+                        # pw
+                        nn.Conv2d(64, 64, 1, 1, 0, bias=False),
+                        nn.BatchNorm2d(64),
+                        nn.ReLU(inplace=True),
+                        )
         self.batchnorm2_2_2 = nn.BatchNorm2d(64)
         self.dropout2_2 = nn.Dropout(p=self.dropout_percentage)
         
         # BLOCK-3 (1) input=(32x32) output = (16x16)
-        self.conv3_1_1 = nn.Conv2d(in_channels=64, out_channels=128, kernel_size=(3,3), stride=(2,2), padding=(1,1))
+        # self.conv3_1_1 = nn.Conv2d(in_channels=64, out_channels=128, kernel_size=(3,3), stride=(2,2), padding=(1,1))
+        self.conv3_1_1 = nn.Sequential(
+                        # dw
+                        nn.Conv2d(in_channels=64, out_channels=64, kernel_size=3, stride=2, padding=1, groups=64, bias=False),
+                        nn.BatchNorm2d(64),
+                        nn.ReLU(inplace=True),
+
+                        # pw
+                        nn.Conv2d(64, 128, 1, 1, 0, bias=False),
+                        nn.BatchNorm2d(128),
+                        nn.ReLU(inplace=True),
+                        )
         self.batchnorm3_1_1 = nn.BatchNorm2d(128)
-        self.conv3_1_2 = nn.Conv2d(in_channels=128, out_channels=128, kernel_size=(3,3), stride=(1,1), padding=(1,1))
+        # self.conv3_1_2 = nn.Conv2d(in_channels=128, out_channels=128, kernel_size=(3,3), stride=(1,1), padding=(1,1))
+        self.conv3_1_1 = nn.Sequential(
+                        # dw
+                        nn.Conv2d(in_channels=128, out_channels=128, kernel_size=3, stride=1, padding=1, groups=128, bias=False),
+                        nn.BatchNorm2d(128),
+                        nn.ReLU(inplace=True),
+
+                        # pw
+                        nn.Conv2d(128, 128, 1, 1, 0, bias=False),
+                        nn.BatchNorm2d(128),
+                        nn.ReLU(inplace=True),
+                        )
         self.batchnorm3_1_2 = nn.BatchNorm2d(128)
-        self.concat_adjust_3 = nn.Conv2d(in_channels=64, out_channels=128, kernel_size=(1,1), stride=(2,2), padding=(0,0))
+        # self.concat_adjust_3 = nn.Conv2d(in_channels=64, out_channels=128, kernel_size=(1,1), stride=(2,2), padding=(0,0))
+        self.concat_adjust_3 = nn.Sequential(
+                        # dw
+                        nn.Conv2d(in_channels=64, out_channels=64, kernel_size=3, stride=2, padding=0, groups=64, bias=False),
+                        nn.BatchNorm2d(64),
+                        nn.ReLU(inplace=True),
+
+                        # pw
+                        nn.Conv2d(64, 128, 1, 1, 0, bias=False),
+                        nn.BatchNorm2d(128),
+                        nn.ReLU(inplace=True),
+                        )
         self.dropout3_1 = nn.Dropout(p=self.dropout_percentage)
         # BLOCK-3 (2)
-        self.conv3_2_1 = nn.Conv2d(in_channels=128, out_channels=128, kernel_size=(3,3), stride=(1,1), padding=(1,1))
+        # self.conv3_2_1 = nn.Conv2d(in_channels=128, out_channels=128, kernel_size=(3,3), stride=(1,1), padding=(1,1))
+        self.conv3_2_1 = nn.Sequential(
+                        # dw
+                        nn.Conv2d(in_channels=128, out_channels=128, kernel_size=3, stride=1, padding=1, groups=128, bias=False),
+                        nn.BatchNorm2d(128),
+                        nn.ReLU(inplace=True),
+
+                        # pw
+                        nn.Conv2d(128, 128, 1, 1, 0, bias=False),
+                        nn.BatchNorm2d(128),
+                        nn.ReLU(inplace=True),
+                        )
+        
         self.batchnorm3_2_1 = nn.BatchNorm2d(128)
-        self.conv3_2_2 = nn.Conv2d(in_channels=128, out_channels=128, kernel_size=(3,3), stride=(1,1), padding=(1,1))
+        # self.conv3_2_2 = nn.Conv2d(in_channels=128, out_channels=128, kernel_size=(3,3), stride=(1,1), padding=(1,1))
+        self.conv3_2_2 = nn.Sequential(
+                        # dw
+                        nn.Conv2d(in_channels=128, out_channels=128, kernel_size=3, stride=1, padding=1, groups=128, bias=False),
+                        nn.BatchNorm2d(128),
+                        nn.ReLU(inplace=True),
+
+                        # pw
+                        nn.Conv2d(128, 128, 1, 1, 0, bias=False),
+                        nn.BatchNorm2d(128),
+                        nn.ReLU(inplace=True),
+                        )
         self.batchnorm3_2_2 = nn.BatchNorm2d(128)
         self.dropout3_2 = nn.Dropout(p=self.dropout_percentage)
         
         # BLOCK-4 (1) input=(16x16) output = (8x8)
-        self.conv4_1_1 = nn.Conv2d(in_channels=128, out_channels=256, kernel_size=(3,3), stride=(2,2), padding=(1,1))
+        # self.conv4_1_1 = nn.Conv2d(in_channels=128, out_channels=256, kernel_size=(3,3), stride=(2,2), padding=(1,1))
+        self.conv4_1_1 = nn.Sequential(
+                        # dw
+                        nn.Conv2d(in_channels=128, out_channels=128, kernel_size=3, stride=2, padding=1, groups=128, bias=False),
+                        nn.BatchNorm2d(128),
+                        nn.ReLU(inplace=True),
+
+                        # pw
+                        nn.Conv2d(64, 256, 1, 1, 0, bias=False),
+                        nn.BatchNorm2d(256),
+                        nn.ReLU(inplace=True),
+                        )
         self.batchnorm4_1_1 = nn.BatchNorm2d(256)
-        self.conv4_1_2 = nn.Conv2d(in_channels=256, out_channels=256, kernel_size=(3,3), stride=(1,1), padding=(1,1))
+        # self.conv4_1_2 = nn.Conv2d(in_channels=256, out_channels=256, kernel_size=(3,3), stride=(1,1), padding=(1,1))
+        self.conv4_1_2 = nn.Sequential(
+                        # dw
+                        nn.Conv2d(in_channels=256, out_channels=256, kernel_size=3, stride=1, padding=1, groups=256, bias=False),
+                        nn.BatchNorm2d(256),
+                        nn.ReLU(inplace=True),
+
+                        # pw
+                        nn.Conv2d(256, 256, 1, 1, 0, bias=False),
+                        nn.BatchNorm2d(256),
+                        nn.ReLU(inplace=True),
+                        )
         self.batchnorm4_1_2 = nn.BatchNorm2d(256)
-        self.concat_adjust_4 = nn.Conv2d(in_channels=128, out_channels=256, kernel_size=(1,1), stride=(2,2), padding=(0,0))
+        # self.concat_adjust_4 = nn.Conv2d(in_channels=128, out_channels=256, kernel_size=(1,1), stride=(2,2), padding=(0,0))
+        self.concat_adjust_4 = nn.Sequential(
+                        # dw
+                        nn.Conv2d(in_channels=128, out_channels=128, kernel_size=1, stride=2, padding=1, groups=128, bias=False),
+                        nn.BatchNorm2d(128),
+                        nn.ReLU(inplace=True),
+
+                        # pw
+                        nn.Conv2d(128, 256, 1, 1, 0, bias=False),
+                        nn.BatchNorm2d(256),
+                        nn.ReLU(inplace=True),
+                        )
         self.dropout4_1 = nn.Dropout(p=self.dropout_percentage)
         # BLOCK-4 (2)
-        self.conv4_2_1 = nn.Conv2d(in_channels=256, out_channels=256, kernel_size=(3,3), stride=(1,1), padding=(1,1))
+        # self.conv4_2_1 = nn.Conv2d(in_channels=256, out_channels=256, kernel_size=(3,3), stride=(1,1), padding=(1,1))
+        self.conv4_2_1 = nn.Sequential(
+                        # dw
+                        nn.Conv2d(in_channels=256, out_channels=256, kernel_size=3, stride=1, padding=1, groups=256, bias=False),
+                        nn.BatchNorm2d(256),
+                        nn.ReLU(inplace=True),
+
+                        # pw
+                        nn.Conv2d(256, 256, 1, 1, 0, bias=False),
+                        nn.BatchNorm2d(256),
+                        nn.ReLU(inplace=True),
+                        )
         self.batchnorm4_2_1 = nn.BatchNorm2d(256)
-        self.conv4_2_2 = nn.Conv2d(in_channels=256, out_channels=256, kernel_size=(3,3), stride=(1,1), padding=(1,1))
+        # self.conv4_2_2 = nn.Conv2d(in_channels=256, out_channels=256, kernel_size=(3,3), stride=(1,1), padding=(1,1))
+        self.conv4_2_2 = nn.Sequential(
+                        # dw
+                        nn.Conv2d(in_channels=256, out_channels=256, kernel_size=3, stride=1, padding=1, groups=256, bias=False),
+                        nn.BatchNorm2d(256),
+                        nn.ReLU(inplace=True),
+
+                        # pw
+                        nn.Conv2d(256, 256, 1, 1, 0, bias=False),
+                        nn.BatchNorm2d(256),
+                        nn.ReLU(inplace=True),
+                        )
         self.batchnorm4_2_2 = nn.BatchNorm2d(256)
         self.dropout4_2 = nn.Dropout(p=self.dropout_percentage)
         
         # BLOCK-5 (1) input=(8x8) output = (4x4)
-        self.conv5_1_1 = nn.Conv2d(in_channels=256, out_channels=512, kernel_size=(3,3), stride=(2,2), padding=(1,1))
+        # self.conv5_1_1 = nn.Conv2d(in_channels=256, out_channels=512, kernel_size=(3,3), stride=(2,2), padding=(1,1))
+        self.conv5_1_1 = nn.Sequential(
+                        # dw
+                        nn.Conv2d(in_channels=256, out_channels=256, kernel_size=3, stride=2, padding=1, groups=256, bias=False),
+                        nn.BatchNorm2d(256),
+                        nn.ReLU(inplace=True),
+
+                        # pw
+                        nn.Conv2d(256, 512, 1, 1, 0, bias=False),
+                        nn.BatchNorm2d(512),
+                        nn.ReLU(inplace=True),
+                        )
         self.batchnorm5_1_1 = nn.BatchNorm2d(512)
-        self.conv5_1_2 = nn.Conv2d(in_channels=512, out_channels=512, kernel_size=(3,3), stride=(1,1), padding=(1,1))
+        # self.conv5_1_2 = nn.Conv2d(in_channels=512, out_channels=512, kernel_size=(3,3), stride=(1,1), padding=(1,1))
+        self.conv5_1_2 == nn.Sequential(
+                        # dw
+                        nn.Conv2d(in_channels=512, out_channels=512, kernel_size=3, stride=1, padding=1, groups=512, bias=False),
+                        nn.BatchNorm2d(512),
+                        nn.ReLU(inplace=True),
+
+                        # pw
+                        nn.Conv2d(512, 512, 1, 1, 0, bias=False),
+                        nn.BatchNorm2d(512),
+                        nn.ReLU(inplace=True),
+                        )
         self.batchnorm5_1_2 = nn.BatchNorm2d(512)
-        self.concat_adjust_5 = nn.Conv2d(in_channels=256, out_channels=512, kernel_size=(1,1), stride=(2,2), padding=(0,0))
+        # self.concat_adjust_5 = nn.Conv2d(in_channels=256, out_channels=512, kernel_size=(1,1), stride=(2,2), padding=(0,0))
+        self.concat_adjust_5 = nn.Sequential(
+                        # dw
+                        nn.Conv2d(in_channels=256, out_channels=256, kernel_size=1, stride=2, padding=1, groups=256, bias=False),
+                        nn.BatchNorm2d(256),
+                        nn.ReLU(inplace=True),
+
+                        # pw
+                        nn.Conv2d(256, 256, 1, 1, 0, bias=False),
+                        nn.BatchNorm2d(256),
+                        nn.ReLU(inplace=True),
+                        )
         self.dropout5_1 = nn.Dropout(p=self.dropout_percentage)
         # BLOCK-5 (2)
-        self.conv5_2_1 = nn.Conv2d(in_channels=512, out_channels=512, kernel_size=(3,3), stride=(1,1), padding=(1,1))
+        # self.conv5_2_1 = nn.Conv2d(in_channels=512, out_channels=512, kernel_size=(3,3), stride=(1,1), padding=(1,1))
+        self.conv5_2_1 = nn.Sequential(
+                # dw
+                nn.Conv2d(in_channels=512, out_channels=512, kernel_size=3, stride=1, padding=1, groups=512, bias=False),
+                nn.BatchNorm2d(512),
+                nn.ReLU(inplace=True),
+
+                # pw
+                nn.Conv2d(512, 512, 1, 1, 0, bias=False),
+                nn.BatchNorm2d(512),
+                nn.ReLU(inplace=True),
+                )
         self.batchnorm5_2_1 = nn.BatchNorm2d(512)
-        self.conv5_2_2 = nn.Conv2d(in_channels=512, out_channels=512, kernel_size=(3,3), stride=(1,1), padding=(1,1))
+        # self.conv5_2_2 = nn.Conv2d(in_channels=512, out_channels=512, kernel_size=(3,3), stride=(1,1), padding=(1,1))
+        self.conv5_2_2 = nn.Sequential(
+                # dw
+                nn.Conv2d(in_channels=512, out_channels=512, kernel_size=3, stride=1, padding=1, groups=512, bias=False),
+                nn.BatchNorm2d(512),
+                nn.ReLU(inplace=True),
+
+                # pw
+                nn.Conv2d(512, 512, 1, 1, 0, bias=False),
+                nn.BatchNorm2d(512),
+                nn.ReLU(inplace=True),
+                )
         self.batchnorm5_2_2 = nn.BatchNorm2d(512)
         self.dropout5_2 = nn.Dropout(p=self.dropout_percentage)
         
