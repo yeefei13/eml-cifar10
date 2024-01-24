@@ -55,13 +55,13 @@ class ResNet18(nn.Module):
     def __init__(self, n_classes):
         super(ResNet18, self).__init__()
         
-        self.dropout_percentage = 0.5
+        self.dropout_percentage = 0
         self.relu = nn.ReLU()
         
         # BLOCK-1 (starting block) input=(32x32) output=(32x32)
-        self.conv1 = nn.Conv2d(in_channels=3, out_channels=64, kernel_size=(3,3), stride=(1,1), padding=(1,1))
+        self.conv1 = nn.Conv2d(in_channels=3, out_channels=64, kernel_size=(3,3), stride=(1,1), padding=(1,1), bias=False)
         self.batchnorm1 = nn.BatchNorm2d(64)
-        self.maxpool1 = nn.MaxPool2d(kernel_size=(1,1), stride=(1,1), padding=(0,0))
+        # self.maxpool1 = nn.MaxPool2d(kernel_size=(1,1), stride=(1,1), padding=(0,0))
         
         # BLOCK-2 (1) input=(32x32) output = (32x32)
 
@@ -140,7 +140,7 @@ class ResNet18(nn.Module):
                         )
         self.batchnorm3_1_1 = nn.BatchNorm2d(128)
         # self.conv3_1_2 = nn.Conv2d(in_channels=128, out_channels=128, kernel_size=(3,3), stride=(1,1), padding=(1,1))
-        self.conv3_1_1 = nn.Sequential(
+        self.conv3_1_2 = nn.Sequential(
                         # dw
                         nn.Conv2d(in_channels=128, out_channels=128, kernel_size=3, stride=1, padding=1, groups=128, bias=False),
                         nn.BatchNorm2d(128),
@@ -152,18 +152,18 @@ class ResNet18(nn.Module):
                         nn.ReLU(inplace=True),
                         )
         self.batchnorm3_1_2 = nn.BatchNorm2d(128)
-        # self.concat_adjust_3 = nn.Conv2d(in_channels=64, out_channels=128, kernel_size=(1,1), stride=(2,2), padding=(0,0))
-        self.concat_adjust_3 = nn.Sequential(
-                        # dw
-                        nn.Conv2d(in_channels=64, out_channels=64, kernel_size=3, stride=2, padding=0, groups=64, bias=False),
-                        nn.BatchNorm2d(64),
-                        nn.ReLU(inplace=True),
+        self.concat_adjust_3 = nn.Conv2d(in_channels=64, out_channels=128, kernel_size=(1,1), stride=(2,2), padding=(0,0))
+        # self.concat_adjust_3 = nn.Sequential(
+        #                 # dw
+        #                 nn.Conv2d(in_channels=64, out_channels=64, kernel_size=3, stride=2, padding=0, groups=64, bias=False),
+        #                 nn.BatchNorm2d(64),
+        #                 nn.ReLU(inplace=True),
 
-                        # pw
-                        nn.Conv2d(64, 128, 1, 1, 0, bias=False),
-                        nn.BatchNorm2d(128),
-                        nn.ReLU(inplace=True),
-                        )
+        #                 # pw
+        #                 nn.Conv2d(64, 128, 1, 1, 0, bias=False),
+        #                 nn.BatchNorm2d(128),
+        #                 nn.ReLU(inplace=True),
+        #                 )
         self.dropout3_1 = nn.Dropout(p=self.dropout_percentage)
         # BLOCK-3 (2)
         # self.conv3_2_1 = nn.Conv2d(in_channels=128, out_channels=128, kernel_size=(3,3), stride=(1,1), padding=(1,1))
@@ -204,7 +204,7 @@ class ResNet18(nn.Module):
                         nn.ReLU(inplace=True),
 
                         # pw
-                        nn.Conv2d(64, 256, 1, 1, 0, bias=False),
+                        nn.Conv2d(128, 256, 1, 1, 0, bias=False),
                         nn.BatchNorm2d(256),
                         nn.ReLU(inplace=True),
                         )
@@ -222,18 +222,18 @@ class ResNet18(nn.Module):
                         nn.ReLU(inplace=True),
                         )
         self.batchnorm4_1_2 = nn.BatchNorm2d(256)
-        # self.concat_adjust_4 = nn.Conv2d(in_channels=128, out_channels=256, kernel_size=(1,1), stride=(2,2), padding=(0,0))
-        self.concat_adjust_4 = nn.Sequential(
-                        # dw
-                        nn.Conv2d(in_channels=128, out_channels=128, kernel_size=1, stride=2, padding=1, groups=128, bias=False),
-                        nn.BatchNorm2d(128),
-                        nn.ReLU(inplace=True),
+        self.concat_adjust_4 = nn.Conv2d(in_channels=128, out_channels=256, kernel_size=(1,1), stride=(2,2), padding=(0,0))
+        # self.concat_adjust_4 = nn.Sequential(
+        #                 # dw
+        #                 nn.Conv2d(in_channels=128, out_channels=128, kernel_size=1, stride=2, padding=1, groups=128, bias=False),
+        #                 nn.BatchNorm2d(128),
+        #                 nn.ReLU(inplace=True),
 
-                        # pw
-                        nn.Conv2d(128, 256, 1, 1, 0, bias=False),
-                        nn.BatchNorm2d(256),
-                        nn.ReLU(inplace=True),
-                        )
+        #                 # pw
+        #                 nn.Conv2d(128, 256, 1, 1, 0, bias=False),
+        #                 nn.BatchNorm2d(256),
+        #                 nn.ReLU(inplace=True),
+        #                 )
         self.dropout4_1 = nn.Dropout(p=self.dropout_percentage)
         # BLOCK-4 (2)
         # self.conv4_2_1 = nn.Conv2d(in_channels=256, out_channels=256, kernel_size=(3,3), stride=(1,1), padding=(1,1))
@@ -277,9 +277,9 @@ class ResNet18(nn.Module):
                         nn.BatchNorm2d(512),
                         nn.ReLU(inplace=True),
                         )
-        self.batchnorm5_1_1 = nn.BatchNorm2d(512)
+        # self.batchnorm5_1_1 = nn.BatchNorm2d(512)
         # self.conv5_1_2 = nn.Conv2d(in_channels=512, out_channels=512, kernel_size=(3,3), stride=(1,1), padding=(1,1))
-        self.conv5_1_2 == nn.Sequential(
+        self.conv5_1_2 = nn.Sequential(
                         # dw
                         nn.Conv2d(in_channels=512, out_channels=512, kernel_size=3, stride=1, padding=1, groups=512, bias=False),
                         nn.BatchNorm2d(512),
@@ -290,19 +290,19 @@ class ResNet18(nn.Module):
                         nn.BatchNorm2d(512),
                         nn.ReLU(inplace=True),
                         )
-        self.batchnorm5_1_2 = nn.BatchNorm2d(512)
-        # self.concat_adjust_5 = nn.Conv2d(in_channels=256, out_channels=512, kernel_size=(1,1), stride=(2,2), padding=(0,0))
-        self.concat_adjust_5 = nn.Sequential(
-                        # dw
-                        nn.Conv2d(in_channels=256, out_channels=256, kernel_size=1, stride=2, padding=1, groups=256, bias=False),
-                        nn.BatchNorm2d(256),
-                        nn.ReLU(inplace=True),
+        # self.batchnorm5_1_2 = nn.BatchNorm2d(512)
+        self.concat_adjust_5 = nn.Conv2d(in_channels=256, out_channels=512, kernel_size=(1,1), stride=(2,2), padding=(0,0))
+        # self.concat_adjust_5 = nn.Sequential(
+        #                 # dw
+        #                 nn.Conv2d(in_channels=256, out_channels=256, kernel_size=1, stride=2, padding=1, groups=256, bias=False),
+        #                 nn.BatchNorm2d(256),
+        #                 nn.ReLU(inplace=True),
 
-                        # pw
-                        nn.Conv2d(256, 256, 1, 1, 0, bias=False),
-                        nn.BatchNorm2d(256),
-                        nn.ReLU(inplace=True),
-                        )
+        #                 # pw
+        #                 nn.Conv2d(256, 256, 1, 1, 0, bias=False),
+        #                 nn.BatchNorm2d(256),
+        #                 nn.ReLU(inplace=True),
+        #                 )
         self.dropout5_1 = nn.Dropout(p=self.dropout_percentage)
         # BLOCK-5 (2)
         # self.conv5_2_1 = nn.Conv2d(in_channels=512, out_channels=512, kernel_size=(3,3), stride=(1,1), padding=(1,1))
@@ -343,7 +343,8 @@ class ResNet18(nn.Module):
         
         # block 1 --> Starting block
         x = self.relu(self.batchnorm1(self.conv1(x)))
-        op1 = self.maxpool1(x)
+        # op1 = self.maxpool1(x)
+        op1 = x
         
         
         # block2 - 1
@@ -351,63 +352,77 @@ class ResNet18(nn.Module):
         x = self.conv2_1(op1)
         # x = self.batchnorm2_1_2(self.conv2_1_2(x))                 # conv2_1
         x = self.conv2_1_2(x)
-     
         x = self.dropout2_1(x)
         # block2 - Adjust - No adjust in this layer as dimensions are already same
         # block2 - Concatenate 1s
         op2_1 = self.relu(x + op1)
+        
+        
         # block2 - 2
         # x = self.relu(self.batchnorm2_2_1(self.conv2_2_1(op2_1)))  # conv2_2
         x = self.conv2_2_1(op2_1) 
-        x = self.batchnorm2_2_2(self.conv2_2_2(x))                 # conv2_2
+        # x = self.batchnorm2_2_2(self.conv2_2_2(x))                 # conv2_2
+        x = self.conv2_2_2(x)
         x = self.dropout2_2(x)
         # op - block2
         op2 = self.relu(x + op2_1)
     
         
         # block3 - 1[Convolution block]
-        x = self.relu(self.batchnorm3_1_1(self.conv3_1_1(op2)))    # conv3_1
-        x = self.batchnorm3_1_2(self.conv3_1_2(x))                 # conv3_1
+        # x = self.relu(self.batchnorm3_1_1(self.conv3_1_1(op2)))    # conv3_1
+        x = self.conv3_1_1(op2)
+        # x = self.batchnorm3_1_2(self.conv3_1_2(x))                 # conv3_1
+        x =self.conv3_1_2(x)
         x = self.dropout3_1(x)
         # block3 - Adjust
         op2 = self.concat_adjust_3(op2) # SKIP CONNECTION
         # block3 - Concatenate 1
         op3_1 = self.relu(x + op2)
         # block3 - 2[Identity Block]
-        x = self.relu(self.batchnorm3_2_1(self.conv3_2_1(op3_1)))  # conv3_2
-        x = self.batchnorm3_2_2(self.conv3_2_2(x))                 # conv3_2 
+        # x = self.relu(self.batchnorm3_2_1(self.conv3_2_1(op3_1)))  # conv3_2
+        x = self.conv3_2_1(op3_1)
+        # x = self.batchnorm3_2_2(self.conv3_2_2(x))                 # conv3_2 
+        x = self.conv3_2_2(x)
         x = self.dropout3_2(x)
         # op - block3
         op3 = self.relu(x + op3_1)
         
         
         # block4 - 1[Convolition block]
-        x = self.relu(self.batchnorm4_1_1(self.conv4_1_1(op3)))    # conv4_1
-        x = self.batchnorm4_1_2(self.conv4_1_2(x))                 # conv4_1
+        # x = self.relu(self.batchnorm4_1_1(self.conv4_1_1(op3)))    # conv4_1
+        x = self.conv4_1_1(op3)
+        # x = self.batchnorm4_1_2(self.conv4_1_2(x))                 # conv4_1
+        x = self.conv4_1_2(x)
         x = self.dropout4_1(x)
         # block4 - Adjust
         op3 = self.concat_adjust_4(op3) # SKIP CONNECTION
         # block4 - Concatenate 1
         op4_1 = self.relu(x + op3)
         # block4 - 2[Identity Block]
-        x = self.relu(self.batchnorm4_2_1(self.conv4_2_1(op4_1)))  # conv4_2
-        x = self.batchnorm4_2_2(self.conv4_2_2(x))                 # conv4_2
+        # x = self.relu(self.batchnorm4_2_1(self.conv4_2_1(op4_1)))  # conv4_2
+        x = self.conv4_2_1(op4_1)
+        # x = self.batchnorm4_2_2(self.conv4_2_2(x))                 # conv4_2
+        x = self.conv4_2_2(x)
         x = self.dropout4_2(x)
         # op - block4
         op4 = self.relu(x + op4_1)
 
         
         # block5 - 1[Convolution Block]
-        x = self.relu(self.batchnorm5_1_1(self.conv5_1_1(op4)))    # conv5_1
-        x = self.batchnorm5_1_2(self.conv5_1_2(x))                 # conv5_1
+        # x = self.relu(self.batchnorm5_1_1(self.conv5_1_1(op4)))    # conv5_1
+        x = self.conv5_1_1(op4)
+        # x = self.batchnorm5_1_2(self.conv5_1_2(x))                 # conv5_1
+        x = self.conv5_1_2(x)
         x = self.dropout5_1(x)
         # block5 - Adjust
         op4 = self.concat_adjust_5(op4) # SKIP CONNECTION
         # block5 - Concatenate 1
         op5_1 = self.relu(x + op4)
         # block5 - 2[Identity Block]
-        x = self.relu(self.batchnorm5_2_1(self.conv5_2_1(op5_1)))  # conv5_2
-        x = self.batchnorm5_2_1(self.conv5_2_1(x))                 # conv5_2
+        # x = self.relu(self.batchnorm5_2_1(self.conv5_2_1(op5_1)))  # conv5_2
+        x = self.conv5_2_1(op5_1)
+        # x = self.batchnorm5_2_1(self.conv5_2_1(x))                 # conv5_2
+        x = self.conv5_2_2(x)
         x = self.dropout5_2(x)
         # op - block5
         op5 = self.relu(x + op5_1)
@@ -432,7 +447,7 @@ def main():
                         help='input batch size for training (default: 64)')
     parser.add_argument('--test-batch-size', type=int, default=1000, metavar='N',
                         help='input batch size for testing (default: 1000)')
-    parser.add_argument('--epochs', type=int, default=10, metavar='N',
+    parser.add_argument('--epochs', type=int, default=10*3, metavar='N',
                         help='number of epochs to train (default: 14)')
     parser.add_argument('--lr', type=float, default=0.1, metavar='LR',
                         help='learning rate (default: 1.0)')
