@@ -78,7 +78,7 @@ class ResNet18(nn.Module):
     def __init__(self, n_classes):
         super(ResNet18, self).__init__()
         
-        self.dropout_percentage = 0.5
+        self.dropout_percentage = 0.7
         self.relu = nn.ReLU()
         
         # BLOCK-1 (starting block) input=(32x32) output=(32x32)
@@ -129,7 +129,6 @@ class ResNet18(nn.Module):
         
         # BLOCK-5 (1) input=(8x8) output = (4x4)
         self.conv5_1_1 = nn.Conv2d(in_channels=256, out_channels=512, kernel_size=(3,3), stride=(2,2), padding=(1,1))
-        # self.conv5_1_1 = nn.Conv2d(in_channels=256, out_channels=512, kernel_size=(3,3), stride=(1,1), padding=(1,1))
         self.batchnorm5_1_1 = nn.BatchNorm2d(512)
         self.conv5_1_2 = nn.Conv2d(in_channels=512, out_channels=512, kernel_size=(3,3), stride=(1,1), padding=(1,1))
         self.batchnorm5_1_2 = nn.BatchNorm2d(512)
@@ -236,13 +235,13 @@ class ResNet18(nn.Module):
 def main():
     # Training settings
     parser = argparse.ArgumentParser(description='PyTorch CIFAR10 Example')
-    parser.add_argument('--batch-size', type=int, default=64*2, metavar='N',
+    parser.add_argument('--batch-size', type=int, default=64, metavar='N',
                         help='input batch size for training (default: 64)')
     parser.add_argument('--test-batch-size', type=int, default=1000, metavar='N',
                         help='input batch size for testing (default: 1000)')
     parser.add_argument('--epochs', type=int, default=50, metavar='N',
                         help='number of epochs to train (default: 14)')
-    parser.add_argument('--lr', type=float, default=0.5, metavar='LR',
+    parser.add_argument('--lr', type=float, default=0.1, metavar='LR',
                         help='learning rate (default: 1.0)')
     parser.add_argument('--gamma', type=float, default=0.3, metavar='M',
                         help='Learning rate step gamma (default: 0.7)')
@@ -254,7 +253,7 @@ def main():
                         help='quickly check a single pass')
     parser.add_argument('--seed', type=int, default=1, metavar='S',
                         help='random seed (default: 1)')
-    parser.add_argument('--log-interval', type=int, default=300, metavar='N',
+    parser.add_argument('--log-interval', type=int, default=100, metavar='N',
                         help='how many batches to wait before logging training status')
     parser.add_argument('--save-model', action='store_true', default=False,
                         help='For Saving the current Model')
@@ -301,14 +300,16 @@ def main():
     optimizer = optim.SGD(model.parameters(), lr=args.lr,  momentum=0.9, weight_decay=0.001, nesterov=True)
 
 
-
+#  model stats
     macs, params = get_model_complexity_info(model, (3, 224, 224), as_strings=True,
                                             print_per_layer_stat=True, verbose=True)
     print('{:<30}  {:<8}'.format('Computational complexity: ', macs))
     print('{:<30}  {:<8}'.format('Number of parameters: ', params))
+
+
     # scheduler = StepLR(optimizer, step_size=5, gamma=args.gamma)
-    # scheduler = ReduceLROnPlateau(optimizer, factor=0.1, patience=3, threshold=0.001, mode='max')
-    scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=200)
+    scheduler = ReduceLROnPlateau(optimizer, factor=0.1, patience=3, threshold=0.001, mode='max')
+    # scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=200)
 
     for epoch in range(1, args.epochs + 1):
         train(args, model, device, train_loader, optimizer, epoch)
