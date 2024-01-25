@@ -7,7 +7,7 @@ import torch.optim as optim
 from torchvision import datasets, transforms
 from torch.optim.lr_scheduler import StepLR
 from torch.optim.lr_scheduler import ReduceLROnPlateau
-
+from ptflops import get_model_complexity_info
 
 class Net(nn.Module):
     def __init__(self):
@@ -296,13 +296,19 @@ def main():
     model = ResNet18( 10).to(device)
     # optimizer = optim.Adadelta(model.parameters(), lr=args.lr)
     # optimizer = torch.optim.SGD(model.parameters(), lr = args.lr, momentum=0.9, weight_decay=1e-4)
-    optimizer = optim.SGD(model.parameters(), lr=args.lr, momentum=0.9, weight_decay=0.0005, nesterov=True)
+    # optimizer = optim.SGD(model.parameters(), lr=, momentum=0.9, weight_decay=0.005, nesterov=True)
+
+    optimizer = optim.SGD(model.parameters(), lr=args.lr,  momentum=0.9, weight_decay=0.001, nesterov=True)
 
 
 
-
+    macs, params = get_model_complexity_info(model, (3, 224, 224), as_strings=True,
+                                            print_per_layer_stat=True, verbose=True)
+    print('{:<30}  {:<8}'.format('Computational complexity: ', macs))
+    print('{:<30}  {:<8}'.format('Number of parameters: ', params))
     # scheduler = StepLR(optimizer, step_size=5, gamma=args.gamma)
-    scheduler = ReduceLROnPlateau(optimizer, factor=0.1, patience=3, threshold=0.001, mode='max')
+    # scheduler = ReduceLROnPlateau(optimizer, factor=0.1, patience=3, threshold=0.001, mode='max')
+    scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=200)
 
     for epoch in range(1, args.epochs + 1):
         train(args, model, device, train_loader, optimizer, epoch)
@@ -323,3 +329,6 @@ if __name__ == '__main__':
 # optimazer sgd, batchsize = 128 acc=83
 # current setting(optimazer, and scheduler) acc84
 # lr =0.5
+
+
+# python resnet.py --batch-size 128 --test-batch-size 100 --lr 0.01
