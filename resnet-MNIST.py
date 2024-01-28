@@ -12,7 +12,7 @@ import numpy as np
 class Net(nn.Module):
     def __init__(self):
         super(Net, self).__init__()
-        self.conv1 = nn.Conv2d(3, 32, 3, 1)
+        self.conv1 = nn.Conv2d(1, 32, 3, 1)
         self.conv2 = nn.Conv2d(32, 64, 3, 1)
         self.dropout1 = nn.Dropout(0.25)
         self.dropout2 = nn.Dropout(0.5)
@@ -82,57 +82,57 @@ class ResNet18(nn.Module):
         self.relu = nn.ReLU()
         
         # BLOCK-1 (starting block) input=(32x32) output=(32x32)
-        self.conv1 = nn.Conv2d(in_channels=3, out_channels=64, kernel_size=(3,3), stride=(1,1), padding=(1,1), bias=False)
+        self.conv1 = nn.Conv2d(in_channels=1, out_channels=64, kernel_size=(3,3), stride=(1,1), padding=(1,1))
         self.batchnorm1 = nn.BatchNorm2d(64)
         self.maxpool1 = nn.MaxPool2d(kernel_size=(1,1), stride=(1,1), padding=(0,0))
         
         # BLOCK-2 (1) input=(32x32) output = (32x32)
-        self.conv2_1_1 = nn.Conv2d(in_channels=64, out_channels=64, kernel_size=(3,3), stride=(1,1), padding=(1,1), bias=False)
+        self.conv2_1_1 = nn.Conv2d(in_channels=64, out_channels=64, kernel_size=(3,3), stride=(1,1), padding=(1,1))
         self.batchnorm2_1_1 = nn.BatchNorm2d(64)
-        self.conv2_1_2 = nn.Conv2d(in_channels=64, out_channels=64, kernel_size=(3,3), stride=(1,1), padding=(1,1), bias=False)
+        self.conv2_1_2 = nn.Conv2d(in_channels=64, out_channels=64, kernel_size=(3,3), stride=(1,1), padding=(1,1))
         self.batchnorm2_1_2 = nn.BatchNorm2d(64)
         self.dropout2_1 = nn.Dropout(p=self.dropout_percentage)
         # BLOCK-2 (2)
-        self.conv2_2_1 = nn.Conv2d(in_channels=64, out_channels=64, kernel_size=(3,3), stride=(1,1), padding=(1,1), bias=False)
+        self.conv2_2_1 = nn.Conv2d(in_channels=64, out_channels=64, kernel_size=(3,3), stride=(1,1), padding=(1,1))
         self.batchnorm2_2_1 = nn.BatchNorm2d(64)
-        self.conv2_2_2 = nn.Conv2d(in_channels=64, out_channels=64, kernel_size=(3,3), stride=(1,1), padding=(1,1), bias=False)
+        self.conv2_2_2 = nn.Conv2d(in_channels=64, out_channels=64, kernel_size=(3,3), stride=(1,1), padding=(1,1))
         self.batchnorm2_2_2 = nn.BatchNorm2d(64)
         self.dropout2_2 = nn.Dropout(p=self.dropout_percentage)
         
         # BLOCK-3 (1) input=(32x32) output = (16x16)
-        self.conv3_1_1 = nn.Conv2d(in_channels=64, out_channels=128, kernel_size=(3,3), stride=(2,2), padding=(1,1), bias=False)
+        self.conv3_1_1 = nn.Conv2d(in_channels=64, out_channels=128, kernel_size=(3,3), stride=(2,2), padding=(1,1))
         self.batchnorm3_1_1 = nn.BatchNorm2d(128)
-        self.conv3_1_2 = nn.Conv2d(in_channels=128, out_channels=128, kernel_size=(3,3), stride=(1,1), padding=(1,1), bias=False)
+        self.conv3_1_2 = nn.Conv2d(in_channels=128, out_channels=128, kernel_size=(3,3), stride=(1,1), padding=(1,1))
         self.batchnorm3_1_2 = nn.BatchNorm2d(128)
-        self.concat_adjust_3 = nn.Conv2d(in_channels=64, out_channels=128, kernel_size=(1,1), stride=(2,2), padding=(0,0), bias=False)
+        self.concat_adjust_3 = nn.Conv2d(in_channels=64, out_channels=128, kernel_size=(1,1), stride=(2,2), padding=(0,0))
         self.dropout3_1 = nn.Dropout(p=self.dropout_percentage)
         # BLOCK-3 (2)
-        self.conv3_2_1 = nn.Conv2d(in_channels=128, out_channels=128, kernel_size=(3,3), stride=(1,1), padding=(1,1), bias=False)
+        self.conv3_2_1 = nn.Conv2d(in_channels=128, out_channels=128, kernel_size=(3,3), stride=(1,1), padding=(1,1))
         self.batchnorm3_2_1 = nn.BatchNorm2d(128)
-        self.conv3_2_2 = nn.Conv2d(in_channels=128, out_channels=128, kernel_size=(3,3), stride=(1,1), padding=(1,1), bias=False)
+        self.conv3_2_2 = nn.Conv2d(in_channels=128, out_channels=128, kernel_size=(3,3), stride=(1,1), padding=(1,1))
         self.batchnorm3_2_2 = nn.BatchNorm2d(128)
         self.dropout3_2 = nn.Dropout(p=self.dropout_percentage)
         
         # BLOCK-4 (1) input=(16x16) output = (8x8)
-        self.conv4_1_1 = nn.Conv2d(in_channels=128, out_channels=256, kernel_size=(3,3), stride=(2,2), padding=(1,1), bias=False)
+        self.conv4_1_1 = nn.Conv2d(in_channels=128, out_channels=256, kernel_size=(3,3), stride=(2,2), padding=(1,1))
         self.batchnorm4_1_1 = nn.BatchNorm2d(256)
-        self.conv4_1_2 = nn.Conv2d(in_channels=256, out_channels=256, kernel_size=(3,3), stride=(1,1), padding=(1,1), bias=False)
+        self.conv4_1_2 = nn.Conv2d(in_channels=256, out_channels=256, kernel_size=(3,3), stride=(1,1), padding=(1,1))
         self.batchnorm4_1_2 = nn.BatchNorm2d(256)
-        self.concat_adjust_4 = nn.Conv2d(in_channels=128, out_channels=256, kernel_size=(1,1), stride=(2,2), padding=(0,0), bias=False)
+        self.concat_adjust_4 = nn.Conv2d(in_channels=128, out_channels=256, kernel_size=(1,1), stride=(2,2), padding=(0,0))
         self.dropout4_1 = nn.Dropout(p=self.dropout_percentage)
         # BLOCK-4 (2)
-        self.conv4_2_1 = nn.Conv2d(in_channels=256, out_channels=256, kernel_size=(3,3), stride=(1,1), padding=(1,1), bias=False)
+        self.conv4_2_1 = nn.Conv2d(in_channels=256, out_channels=256, kernel_size=(3,3), stride=(1,1), padding=(1,1))
         self.batchnorm4_2_1 = nn.BatchNorm2d(256)
-        self.conv4_2_2 = nn.Conv2d(in_channels=256, out_channels=256, kernel_size=(3,3), stride=(1,1), padding=(1,1), bias=False)
+        self.conv4_2_2 = nn.Conv2d(in_channels=256, out_channels=256, kernel_size=(3,3), stride=(1,1), padding=(1,1))
         self.batchnorm4_2_2 = nn.BatchNorm2d(256)
         self.dropout4_2 = nn.Dropout(p=self.dropout_percentage)
         
         # BLOCK-5 (1) input=(8x8) output = (4x4)
-        self.conv5_1_1 = nn.Conv2d(in_channels=256, out_channels=512, kernel_size=(3,3), stride=(2,2), padding=(1,1), bias=False)
+        self.conv5_1_1 = nn.Conv2d(in_channels=256, out_channels=512, kernel_size=(3,3), stride=(2,2), padding=(1,1))
         self.batchnorm5_1_1 = nn.BatchNorm2d(512)
-        self.conv5_1_2 = nn.Conv2d(in_channels=512, out_channels=512, kernel_size=(3,3), stride=(1,1), padding=(1,1), bias=False)
+        self.conv5_1_2 = nn.Conv2d(in_channels=512, out_channels=512, kernel_size=(3,3), stride=(1,1), padding=(1,1))
         self.batchnorm5_1_2 = nn.BatchNorm2d(512)
-        self.concat_adjust_5 = nn.Conv2d(in_channels=256, out_channels=512, kernel_size=(1,1), stride=(2,2), padding=(0,0), bias=False)
+        self.concat_adjust_5 = nn.Conv2d(in_channels=256, out_channels=512, kernel_size=(1,1), stride=(2,2), padding=(0,0))
         # self.concat_adjust_5 = nn.Conv2d(in_channels=256, out_channels=512, kernel_size=(1,1), stride=(1,1), padding=(0,0))
 
         self.dropout5_1 = nn.Dropout(p=self.dropout_percentage)
@@ -234,15 +234,6 @@ class ResNet18(nn.Module):
 
 def main():
     # Training settings
-    # parser = argparse.ArgumentParser(description='PyTorch CIFAR10 Example')
-    # parser.add_argument('--batch-size', type=int, default=64, metavar='N',
-    #                     help='input batch size for training (default: 64)')
-    # parser.add_argument('--test-batch-size', type=int, default=1000, metavar='N',
-    #                     help='input batch size for testing (default: 1000)')
-    # parser.add_argument('--epochs', type=int, default=50, metavar='N',
-    #                     help='number of epochs to train (default: 14)')
-    # parser.add_argument('--lr', type=float, default=0.1, metavar='LR',
-    #                     help='learning rate (default: 1.0)')
     parser = argparse.ArgumentParser(description='PyTorch MNIST Example')
     parser.add_argument('--batch-size', type=int, default=128, metavar='N',  # Changed to 128
                         help='input batch size for training (default: 128)')
@@ -254,6 +245,16 @@ def main():
                         help='learning rate (default: 0.1)')
      
 
+    # parser = argparse.ArgumentParser(description='PyTorch MNIST Example')
+    # parser.add_argument('--batch-size', type=int, default=64, metavar='N',
+    #                     help='input batch size for training (default: 64)')
+    # parser.add_argument('--test-batch-size', type=int, default=1000, metavar='N',
+    #                     help='input batch size for testing (default: 1000)')
+    # parser.add_argument('--epochs', type=int, default=50, metavar='N',
+    #                     help='number of epochs to train (default: 14)')
+    # parser.add_argument('--lr', type=float, default=0.1, metavar='LR',
+    #                     help='learning rate (default: 1.0)')
+    
     parser.add_argument('--gamma', type=float, default=0.3, metavar='M',
                         help='Learning rate step gamma (default: 0.7)')
     parser.add_argument('--no-cuda', action='store_true', default=False,
@@ -295,15 +296,15 @@ def main():
         transforms.ToTensor(),
         transforms.Normalize((0.1307,), (0.3081,))
         ])
-    dataset1 = datasets.CIFAR10('../data', train=True, download=True,
+    dataset1 = datasets.MNIST('../data', train=True, download=True,
                        transform=transform)
-    dataset2 = datasets.CIFAR10('../data', train=False,
+    dataset2 = datasets.MNIST('../data', train=False,
                        transform=transform)
     train_loader = torch.utils.data.DataLoader(dataset1,**train_kwargs)
     test_loader = torch.utils.data.DataLoader(dataset2, **test_kwargs)
 
     # model = Net().to(device)
-    model = ResNet18(10).to(device)
+    model = ResNet18( 10).to(device)
     # optimizer = optim.Adadelta(model.parameters(), lr=args.lr)
     # optimizer = torch.optim.SGD(model.parameters(), lr = args.lr, momentum=0.9, weight_decay=1e-4)
     # optimizer = optim.SGD(model.parameters(), lr=, momentum=0.9, weight_decay=0.005, nesterov=True)
@@ -312,9 +313,13 @@ def main():
 
     # scheduler = StepLR(optimizer, step_size=5, gamma=args.gamma)
     # scheduler = ReduceLROnPlateau(optimizer, factor=0.1, patience=3, threshold=0.001, mode='max')
-    scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=200)
+    # scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=200)
     
-    
+    # standard
+    # optimizer = optim.SGD(model.parameters(), lr=args.lr, momentum=0.9, weight_decay=1e-4, nesterov=True)  # Adjusted weight decay
+    scheduler = ReduceLROnPlateau(optimizer, factor=0.1, patience=3, threshold=0.001, mode='max')
+    # scheduler = StepLR(optimizer, step_size=30, gamma=0.1)  # Changed to StepLR with standard parameters
+
     for epoch in range(1, args.epochs + 1):
         train(args, model, device, train_loader, optimizer, epoch)
         loss = test(model, device, test_loader)
@@ -322,6 +327,9 @@ def main():
         
     if args.save_model:
         torch.save(model.state_dict(), "CIFAR10_cnn.pt")
+
+    if args.save_model:
+        torch.save(model.state_dict(), "MNIST_cnn.pt")
 
 
 if __name__ == '__main__':
@@ -336,4 +344,4 @@ if __name__ == '__main__':
 # lr =0.5
 
 
-# python resnet.py --batch-size 128 --test-batch-size 100 --lr 0.01  acc = 87
+# python resnet.py --batch-size 128 --test-batch-size 100 --lr 0.01
