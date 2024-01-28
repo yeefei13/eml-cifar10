@@ -335,7 +335,8 @@ class ResNet18(nn.Module):
         self.dropout5_2 = nn.Dropout(p=self.dropout_percentage)
         
         # Final Block input=(4x4) 
-        self.avgpool = nn.AvgPool2d(kernel_size=(4,4), stride=(1,1))
+        # self.avgpool = nn.AvgPool2d(kernel_size=(4,4), stride=(1,1))
+        self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
         self.fc = nn.Linear(in_features=1*1*512, out_features=1000)
         self.out = nn.Linear(in_features=1000, out_features=n_classes)
         # END
@@ -508,7 +509,7 @@ def main():
 
     device = torch.device("cuda")
     model.to(device)
-    dummy_input = torch.randn(1, 3,224,224, dtype=torch.float).to(device)
+    dummy_input = torch.randn(1, 3, 224, 224, dtype=torch.float).to(device)
 
     # INIT LOGGERS
     starter, ender = torch.cuda.Event(enable_timing=True), torch.cuda.Event(enable_timing=True)
